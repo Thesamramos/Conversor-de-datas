@@ -12,9 +12,9 @@ if date_type == 1:
     month = int(input("Informe o mês (2 digitos): "))
     year = int(input("informe o ano (4 digitos): "))
 
-    date = arrow.get(f"{year}-{month}-{day}")
+    date = arrow.get(year, month, day)
 else:
-    date = arrow.utcnow()
+    date = arrow.now()
 
 while True:
 
@@ -31,19 +31,20 @@ while True:
         print("\nPrograma encerrado.")
         break
 
-    def return_date_format(choice_date_format):
-        match choice_date_format:
-            case 1:
-                return "\nData formatada para o padrão internacional: " + date.format("YYYY-MM-DD")
-            case 2:
-                return "\nData formatada para o padrão dos EUA: " + date.format("MM/DD/YYYY")
-            case 3:
-                return "\nData formatada para o padrão europeu: " + date.format("DD/MM/YYYY")
-            case 4:
-                return "\nData formatada para o padrão asiatico: " + date.format("YYYY/MM/DD")
-            case 5:
-                return "\nData formatada para o padrão verbal: " + date.format("DD - MMMM - YYYY", locale="pt-br").replace("-", "de")
-            case _:
-                return "\nOpção Inválida"
+    def formatted_date(choice_date_format):
+       formats = {
+           1:"YYYY-MM-DD",
+           2:"MM/DD/YYYY",
+           3:"DD/MM/YYYY",
+           4:"YYYY/MM/DD",
+           5:"DD [de] MMMM [de] YYYY"
+       }
+       try:
+        if choice_date_format == 5:
+            return "\nData formatada: " + date.format(formats[choice_date_format], locale='pt-br')
+        else:
+            return "\nData formatada: " + date.format(formats[choice_date_format])
+       except KeyError:
+           return "\nOpção Inválida"
 
-    print(return_date_format(choice_date_format))
+    print(formatted_date(choice_date_format))
